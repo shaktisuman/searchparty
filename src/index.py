@@ -1,5 +1,6 @@
 """Module represents wrapper for solr."""
 import solr
+from urllib2 import urlopen
 
 
 class SolrSearch:
@@ -16,15 +17,28 @@ class SolrSearch:
         Args:
             url (string) The Solr URL for the searchparty collection
         """
-
+        self.url = url
         self.conn = solr.SolrConnection(url)
 
     def add(self, doc):
         """Index the document in solr."""
-        print self.conn.add(id=doc["id"], tokens=doc["tokens"])
+        self.conn.add(id=doc["id"], tokens=doc["tokens"])
         self.conn.commit()
 
-    fields = ["id", "tokens"]
+    def query(self, tokens):
+        """Query input tokens."""
+        query_url = self.url+"/select?q="
+        query_url = query_url + "+".join(tokens)  # Query OR between tokens
+        # query_url = query_url + "%20AND%20".join(tokens) # This is for AND
+        print query_url
+        connection = urlopen(query_url)
+        response = eval(connection.read())
+        print "query formed: ", query_url
+        print response['response']['numFound'], "documents found."
+        return response['response']['docs']
+
+
+# fields = ["id", "tokens"]
 
 
 # Driver Code:
@@ -32,3 +46,4 @@ class SolrSearch:
 # s = SolrSearch(url)
 # doc = {'id': '3', 'tokens': ['harsha', 'is', 'good', '.']}
 # s.add(doc)
+# s.query(["the","and"])

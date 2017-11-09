@@ -1,6 +1,7 @@
 """Module represents Shallow NLP pipeline."""
 from nltk.corpus import reuters
 import index
+import nltk
 
 
 class ShallowPipeline:
@@ -38,8 +39,14 @@ class ShallowPipeline:
         else:
             return reuters.sents()
 
+    def search(self, sentence):
+        """Return top 10 relevant search result for given string."""
+        docs = self.solr.query(nltk.word_tokenize(sentence))
+        for doc in docs:
+            print " ".join(doc["tokens"])
 
 # Driver Code
 url = "http://localhost:8983/solr/searchparty"
 shallownlp = ShallowPipeline(url, True)
-shallownlp.index_sentences()
+# shallownlp.index_sentences()
+shallownlp.search("Malaysia and Japan")

@@ -422,7 +422,7 @@
   <!--
     Start of fields added for Search Party
    -->
-  <field name="tokens" type="text_general"/>
+  <field indexed="true" stored="true" name="tokens" type="text_general"/>
 
   <!--
     End of fields added for Search Party

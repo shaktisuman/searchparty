@@ -33,34 +33,38 @@ Details of the corpus are mentioned below.
 ###### Instruction  
 Implement a shallow NLP pipeline to perform the following:  
 - Keyword search index creation  
-  *  Segment the News articles into sentences  
-  *  Tokenize the sentences into words  
-  *  Index the word vector per sentence into search index such as Lucene or SOLR  
+  - [x]  Segment the News articles into sentences  
+  - [x]  Tokenize the sentences into words  
+  - [x]  Index the word vector per sentence into search index such as Lucene or SOLR  
 - Natural language query parsing and search  
-  *  Segment an user’s input natural language query into sentences  
-  *  Tokenize the sentences into words  
-  *  Run a search/match with the search query word vector against the sentence word vector (present in the Lucene/SOLR search index) created from the corpus  
+  - [x]  Segment an user’s input natural language query into sentences  
+  - [x]  Tokenize the sentences into words  
+  - [x]  Run a search/match with the search query word vector against the sentence word vector (present in the Lucene/SOLR search index) created from the corpus  
 - Evaluate the results of at least 10 search queries for the top-10 returned sentence matches
 
 ###### Implementation
 
-- [ ] To be added..
+We used solrpy, a python client for the Solr search service to index the word vector for each sentences.
+
+**index.py** file includes the implementation of wrapper class which uses solrpy to index sentences in solr.
+
+**shallowpipeline.py** file includes the implementation of shallow nlp pipeline as per task 2.
 
 ### 3. Deeper NLP pipeline:  
 
 ###### Instruction  
 Implement a deeper NLP pipeline to perform the following: o Semantic search index creation
 - Segment the News articles into sentences
-  * Tokenize the sentences into words
-  * Lemmatize the words to extract lemmas as features
-  * Stem the words to extract stemmed words as features
-  * Part-of-speech (POS) tag the words to extract POS tag features
-  * Syntactically parse the sentence and extract phrases, head words, OR dependency parse relations as features
-  * Using WordNet, extract hypernymns, hyponyms, meronyms, AND holonyms as features
-  * Index the various NLP features as separate search fields in a search index such as Lucene or SOLR
+  - [ ] Tokenize the sentences into words
+  - [ ] Lemmatize the words to extract lemmas as features
+  - [ ] Stem the words to extract stemmed words as features
+  - [ ] Part-of-speech (POS) tag the words to extract POS tag features
+  - [ ] Syntactically parse the sentence and extract phrases, head words, OR dependency parse relations as features
+  - [ ] Using WordNet, extract hypernymns, hyponyms, meronyms, AND holonyms as features
+  - [ ] Index the various NLP features as separate search fields in a search index such as Lucene or SOLR
 - Natural language query parsing and search
-  * Run the above described deeper NLP on an user’s input natural language and extract search query features
-  * Run a search/match against the separate or combination of search index fields created from the corpus
+  - [ ] Run the above described deeper NLP on an user’s input natural language and extract search query features
+  - [ ] Run a search/match against the separate or combination of search index fields created from the corpus
 - Evaluate the results of at least 10 search queries for the top-10 returned sentence matches
 
 
@@ -87,13 +91,17 @@ To make this project work, we will need following setups.
 2.  Download reuters corpus.
 
     ```python  
-    import nltk
-    nltk.download('reuters')
+    >>> import nltk
+    >>> nltk.download('reuters')
     ```
 
-3. Install Solr
+3. Install solr
 4. Use the managed-schema in the resources folder to create a core in Solr.
+5. Install solrpy
 
+    ```bash
+    $ sudo pip install solrpy
+    ```
 ---
 ## References
 
