@@ -9,14 +9,14 @@ The implementation is divided in 4 parts which were provided as 4 Tasks for the 
 #### 1. Corpus:
 
 ###### Instruction  
-Create a corpus of News articles. Your corpus should contain at least: o 1,000 articles
-o 100,000 words
+Create a corpus of News articles. Your corpus should contain at least:  
+o 1,000 articles  
+o 100,000 words  
+
 Note: you are free to download freely and publicly available News articles corpora from
 public websites such as: http://www.nltk.org/nltk_data/
 
 ###### Implementation  
-
-- [x] To be added..
 
 We would be working with **The Reuters-21578 benchmark corpus, ApteMod version** corpus of NLTK.
 
@@ -24,7 +24,7 @@ Details of the corpus are mentioned below.
 
 *id*: reuters  
 *size*: 6378691  
-*license*: The copyright for the text of newswire articles and Reuters annotations in the Reuters-21578 collection resides with Reuters Ltd. Reuters Ltd. and Carnegie Group, Inc. have agreed to allow the free distribution of this data **for research purposes only**. If you publish results based on this data set, please acknowledge its use, refer to the data set by the name 'Reuters-21578, Distribution 1.0', and inform your readers of the current location of the data set.
+*license*: The copyright for the text of newswire articles and Reuters annotations in the Reuters-21578 collection resides with Reuters Ltd. Reuters Ltd. and Carnegie Group, Inc. have agreed to allow the free distribution of this data **for research purposes only**. If you publish results based on this data set, please acknowledge its use, refer to the data set by the name 'Reuters-21578, Distribution 1.0', and inform your readers of the current location of the data set.  
 *url*: http://www.nltk.org/nltk_data/
 
 
@@ -77,6 +77,22 @@ Improve the shallow NLP pipeline results using a combination of deeper NLP pipel
 
 - [ ] To be added..
 
+---
+
+#### Prerequisite
+
+To make this project work, we will need following setups.
+
+1.  Install Python 2.7
+2.  Download reuters corpus.
+
+    ```python  
+    import nltk
+    nltk.download('reuters')
+    ```
+
+3. Install Solr
+4. Use the managed-schema in the resources folder to create a core in Solr.
 
 ---
 ## References
