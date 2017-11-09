@@ -2,11 +2,11 @@
 
 This project is implemented as part of CS 6320 - Natural Language Processing at University of Texas Dallas by **Harsha Kokel** and **Shakti Suman**.
 
-It is an implemention of a semantic search application that will produce improved results using NLP features and techniques. Project implements a keyword-based strategy and an improved strategy using NLP feature and techniques. 
+It is an implemention of a semantic search application that will produce improved results using NLP features and techniques. Project implements a keyword-based strategy and an improved strategy using NLP feature and techniques.
 
 The implementation is divided in 4 parts which were provided as 4 Tasks for the project. The 'Instruction' section in each part is a copy of the Instruction provided where as 'Implementation' section provides the details about our project.
 
-#### 1. Corpus: 
+#### 1. Corpus:
 
 ###### Instruction  
 Create a corpus of News articles. Your corpus should contain at least: o 1,000 articles
@@ -16,7 +16,17 @@ public websites such as: http://www.nltk.org/nltk_data/
 
 ###### Implementation  
 
-- [ ] To be added..
+- [x] To be added..
+
+We would be working with **The Reuters-21578 benchmark corpus, ApteMod version** corpus of NLTK.
+
+Details of the corpus are mentioned below.
+
+*id*: reuters  
+*size*: 6378691  
+*license*: The copyright for the text of newswire articles and Reuters annotations in the Reuters-21578 collection resides with Reuters Ltd. Reuters Ltd. and Carnegie Group, Inc. have agreed to allow the free distribution of this data **for research purposes only**. If you publish results based on this data set, please acknowledge its use, refer to the data set by the name 'Reuters-21578, Distribution 1.0', and inform your readers of the current location of the data set.
+*url*: http://www.nltk.org/nltk_data/
+
 
 #### 2. Shallow NLP Pipeline:
 
@@ -32,7 +42,7 @@ Implement a shallow NLP pipeline to perform the following:
   *  Run a search/match with the search query word vector against the sentence word vector (present in the Lucene/SOLR search index) created from the corpus  
 - Evaluate the results of at least 10 search queries for the top-10 returned sentence matches
 
-###### Implementation 
+###### Implementation
 
 - [ ] To be added..
 
@@ -58,7 +68,7 @@ Implement a deeper NLP pipeline to perform the following: o Semantic search inde
 
 - [ ] To be added..
 
-#### 4. Improve result: 
+#### 4. Improve result:
 
 ###### Instruction  
 Improve the shallow NLP pipeline results using a combination of deeper NLP pipeline features
@@ -66,14 +76,14 @@ Improve the shallow NLP pipeline results using a combination of deeper NLP pipel
 ###### Implementation  
 
 - [ ] To be added..
-  
+
 
 ---
 ## References
 
 - [ ] To be added..
 
-#### Note: 
+#### Note:
 You are free to implement or use a third-party tool such as:
 1. NLTK: http://www.nltk.org/
 2. Stanford NLP: http://nlp.stanford.edu/software/corenlp.shtml
