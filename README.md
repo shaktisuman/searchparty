@@ -55,9 +55,9 @@ We used solrpy, a python client for the Solr search service to index the word ve
 ###### Instruction  
 Implement a deeper NLP pipeline to perform the following: o Semantic search index creation
 - Segment the News articles into sentences
-  - [ ] Tokenize the sentences into words
-  - [ ] Lemmatize the words to extract lemmas as features
-  - [ ] Stem the words to extract stemmed words as features
+  - [x] Tokenize the sentences into words
+  - [x] Lemmatize the words to extract lemmas as features
+  - [x] Stem the words to extract stemmed words as features
   - [ ] Part-of-speech (POS) tag the words to extract POS tag features
   - [ ] Syntactically parse the sentence and extract phrases, head words, OR dependency parse relations as features
   - [ ] Using WordNet, extract hypernymns, hyponyms, meronyms, AND holonyms as features
