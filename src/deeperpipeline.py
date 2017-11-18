@@ -32,7 +32,8 @@ class DeeperPipeline:
         """Index the sentences of the corpus."""
         i = 0
         for sentence in self.getSentences():
-            doc = {'id': i, 'tokens': sentence}
+            stems = self.stem(sentence)
+            doc = {'id': i, 'tokens': sentence, 'stem': stems}
             self.solr.add(doc)
             i = i+1
 
