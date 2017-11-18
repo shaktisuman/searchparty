@@ -54,19 +54,17 @@ class DeeperPipeline:
         """Return the list of stem for given sentence."""
         return [self.stemmer.stem(x) for x in sentence]
 
-
     def lemma(self, sentence, POS):
         """Return the list of lemmatized word for given sentence."""
         return [self.lemmatizer.lemmatize(t, pos=p) for x, y in zip(sentence, POS)]
 
     def POS(self, sentence):
-        """POS to be added"""
+        """POS to be added."""
         return
-
 
 
 # Driver Code
 url = "http://localhost:8983/solr/searchparty"
 deepernlp = DeeperPipeline(url, True)
 # shallownlp.index_sentences()
-shallownlp.search("Malaysia and Japan")
+deepernlp.search("Malaysia and Japan")
