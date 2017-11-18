@@ -56,7 +56,7 @@ class DeeperPipeline:
 
     def lemma(self, sentence, POS):
         """Return the list of lemmatized word for given sentence."""
-        return [self.lemmatizer.lemmatize(t, pos=p) for x, y in zip(sentence, POS)]
+        return [self.lemmatizer.lemmatize(t, pos=p) for t, p in zip(sentence, POS)]
 
     def POS(self, sentence):
         """POS to be added."""
