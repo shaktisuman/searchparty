@@ -9,9 +9,9 @@ from nltk.parse.stanford import StanfordDependencyParser
 from nltk.parse.stanford import StanfordParser
 from nltk.tokenize import word_tokenize
 
-os.environ['CLASSPATH'] = '/Users/hkokel/UTD/SEM-I/CS 6320 - NLP/Homework/Project/searchparty/resources/stanford-ner-2017-06-09:/Users/hkokel/UTD/SEM-I/CS 6320 - NLP/Homework/Project/searchparty/resources/stanford-parser-full-2017-06-09'
+os.environ['CLASSPATH'] = '../resources/stanford-ner-2017-06-09:../resources/stanford-parser-full-2017-06-09'
 os.environ['JAVAHOME'] = '/usr/bin/java'
-os.environ['STANFORD_MODELS'] = '/Users/hkokel/UTD/SEM-I/CS 6320 - NLP/Homework/Project/searchparty/resources/stanford-ner-2017-06-09/classifiers:/Users/hkokel/UTD/SEM-I/CS 6320 - NLP/Homework/Project/searchparty/resources/stanford-parser-full-2017-06-09'
+os.environ['STANFORD_MODELS'] = '../resources/stanford-ner-2017-06-09/classifiers:../resources/stanford-parser-full-2017-06-09'
 
 
 class DeeperPipeline:
@@ -35,26 +35,34 @@ class DeeperPipeline:
         self.testrun = testrun
         self.stemmer = PorterStemmer()
         self.lemmatizer = WordNetLemmatizer()
+        self.dep_parser = StanfordDependencyParser(model_path='edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz')
+        self.parser = StanfordParser(model_path="edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz")
+        self.nertagger = StanfordNERTagger('english.muc.7class.distsim.crf.ser.gz')
 
     def index_sentences(self):
         """Index the sentences of the corpus."""
         i = 0
         for sentence in self.getSentences():
             stems = self.stem(sentence)
-            doc = {'id': i, 'tokens': sentence, 'stem': stems}
+            dependency_parse, headword = self.dep_parse_and_headword(sentence)
+            named_entities = self.ner_tag(sentence)
+            doc = {'id': i, 'tokens': sentence, 'stem': stems,
+                   'parse': dependency_parse, 'headword': headword,
+                   'named_entities': named_entities}
             self.solr.add(doc)
+            # print doc
             i = i+1
 
     def getSentences(self):
         """Return 100 sentences if testrun, all sentences otherwise."""
         if self.testrun:
-            return reuters.sents()[0:100]
+            return reuters.sents()[0:5]
         else:
             return reuters.sents()
 
     def search(self, sentence):
         """Return top 10 relevant search result for given string."""
-        docs = self.solr.query(nltk.word_tokenize(sentence))
+        docs = self.solr.query(word_tokenize(sentence))
         for doc in docs:
             print " ".join(doc["tokens"])
 
