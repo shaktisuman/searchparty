@@ -102,10 +102,16 @@ To make this project work, we will need following setups.
     ```bash
     $ sudo pip install solrpy
     ```
+6. Download stanford parser
+7. Download stanford NER tagger
+
+
 ---
 ## References
 
 - [ ] To be added..
+
+1. https://blog.manash.me/configuring-stanford-parser-and-stanford-ner-tagger-with-nltk-in-python-on-windows-f685483c374a
 
 #### Note:
 You are free to implement or use a third-party tool such as:

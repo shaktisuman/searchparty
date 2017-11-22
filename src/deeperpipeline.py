@@ -1,9 +1,17 @@
 """Module represents Shallow NLP pipeline."""
+import index
+import os
+from nltk.tag import StanfordNERTagger
 from nltk.corpus import reuters
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
-import index
-import nltk
+from nltk.parse.stanford import StanfordDependencyParser
+from nltk.parse.stanford import StanfordParser
+from nltk.tokenize import word_tokenize
+
+os.environ['CLASSPATH'] = '/Users/hkokel/UTD/SEM-I/CS 6320 - NLP/Homework/Project/searchparty/resources/stanford-ner-2017-06-09:/Users/hkokel/UTD/SEM-I/CS 6320 - NLP/Homework/Project/searchparty/resources/stanford-parser-full-2017-06-09'
+os.environ['JAVAHOME'] = '/usr/bin/java'
+os.environ['STANFORD_MODELS'] = '/Users/hkokel/UTD/SEM-I/CS 6320 - NLP/Homework/Project/searchparty/resources/stanford-ner-2017-06-09/classifiers:/Users/hkokel/UTD/SEM-I/CS 6320 - NLP/Homework/Project/searchparty/resources/stanford-parser-full-2017-06-09'
 
 
 class DeeperPipeline:
@@ -56,15 +64,30 @@ class DeeperPipeline:
 
     def lemma(self, sentence, POS):
         """Return the list of lemmatized word for given sentence."""
+        # TO-DO Add Lemma after POS implementation
         return [self.lemmatizer.lemmatize(t, pos=p) for t, p in zip(sentence, POS)]
 
     def POS(self, sentence):
         """POS to be added."""
         return
 
+    def dep_parse_and_headword(self, sentence):
+        """Return the dependecy list and headword of the given sentence."""
+        parse = next(self.dep_parser.raw_parse(' '.join(sentence)))
+        dependency = list(parse.triples())
+        headword = parse.tree().label()
+        return dependency, headword
+
+    def ner_tag(self, sentence):
+        """Return Named Entities from the sentence."""
+        named_entities = []
+        for x, y in self.nertagger.tag(sentence):
+            if y != 'O':
+                named_entities.append((x, y))
+        return named_entities
 
 # Driver Code
 url = "http://localhost:8983/solr/searchparty"
 deepernlp = DeeperPipeline(url, True)
-# shallownlp.index_sentences()
+deepernlp.index_sentences()
 deepernlp.search("Malaysia and Japan")
