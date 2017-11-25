@@ -428,8 +428,12 @@
   <field indexed="true" stored="true" name="pos" type="text_general"/>
   <field indexed="true" stored="true" name="hyponyms" type="text_general"/>
   <field indexed="true" stored="true" name="hypernyms" type="text_general"/>
-  <field indexed="true" stored="true" name="meronyms" type="text_general"/>
-  <field indexed="true" stored="true" name="holonyms" type="text_general"/>
+  <field indexed="true" stored="true" name="substance_meronym" type="text_general"/>
+  <field indexed="true" stored="true" name="member_meronym" type="text_general"/>
+  <field indexed="true" stored="true" name="part_meronym" type="text_general"/>
+  <field indexed="true" stored="true" name="substance_holonym" type="text_general"/>
+  <field indexed="true" stored="true" name="member_holonym" type="text_general"/>
+  <field indexed="true" stored="true" name="part_holonym" type="text_general"/>
   <field indexed="true" stored="true" name="headword" type="text_general"/>
   <field indexed="true" stored="true" name="phrases" type="text_general"/>
   
