@@ -49,9 +49,19 @@ class DeeperPipeline:
             stems = self.stem(sentence)
             dependency_parse, headword = self.dep_parse_and_headword(sentence)
             named_entities = self.ner_tag(sentence)
+            POS = self.POS(sentence)
+            lemma = self.lemma(sentence, POS)
+            hypernym = self.hypernym(sentence)
+            hyponym = self.hyponym(sentence)
+            substance_meronym = self.substance_meronym(sentence)
+            member_meronym = self.member_meronym(sentence)
+            part_meronym = self.part_meronym(sentence)
+            substance_holonym = self.substance_holonym(sentence)
+            member_holonym = self.member_holonym(sentence)
+            part_holonym = self.part_holonym(sentence)
             doc = {'id': i, 'tokens': sentence, 'stem': stems,
                    'parse': dependency_parse, 'headword': headword,
-                   'named_entities': named_entities}
+                   'named_entities': named_entities, 'POS': POS, 'lemma': lemma, 'hypernym': hypernym, 'hyponym': hyponym, 'substance_meronym': substance_meronym, 'member_meronym': member_meronym, 'part_meronym': part_meronym, 'substance_holonym': substance_holonym, 'member_holonym': member_holonym, 'part_holonym': part_holonym}
             self.solr.add(doc)
             # print doc
             i = i+1
