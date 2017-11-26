@@ -83,15 +83,15 @@ class DeeperPipeline:
         """Return the list of stem for given sentence."""
         return [self.stemmer.stem(x) for x in sentence]
 
-    def lemma(self, sentence, POS):
+    def lemma(self, POS):
         """Return the list of lemmatized word for given sentence."""
         # TO-DO Add Lemma after POS implementation
-        return [self.lemmatizer.lemmatize(t, pos=p) for t, p in zip(sentence, POS)]
+        return [self.lemmatizer.lemmatize(p[0], p[1]) for p in POS]
 
     def POS(self, sentence):
         """Return Perceptron Pre-trained POS tags for words in a sentence."""
         pretrain = PerceptronTagger()
-        return pretrain.tag(sentence.split())
+        return pretrain.tag(sentence)
 
     def dep_parse_and_headword(self, sentence):
         """Return the dependecy list and headword of the given sentence."""
