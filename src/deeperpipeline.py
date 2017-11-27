@@ -85,8 +85,13 @@ class DeeperPipeline:
 
     def lemma(self, POS):
         """Return the list of lemmatized word for given sentence."""
-        # TO-DO Add Lemma after POS implementation
-        return [self.lemmatizer.lemmatize(p[0], p[1]) for p in POS]
+        lemma = []
+        for p in POS:
+            if self.penn_to_wn(p[1]) is None:
+                lemma.append(self.lemmatizer.lemmatize(p[0]))
+            else:
+                lemma.append(self.lemmatizer.lemmatize(p[0], pos=self.penn_to_wn(p[1])))
+        return lemma
 
     def POS(self, sentence):
         """Return Perceptron Pre-trained POS tags for words in a sentence."""
@@ -191,9 +196,21 @@ class DeeperPipeline:
                 part_substance_holonym_list.append("")
         return part_substance_holonym_list
 
+    def penn_to_wn(self, tag):
+        """Map Penn tag to Wordnet tag."""
+        if tag in ['JJ', 'JJR', 'JJS']:
+            return wordnet.ADJ
+        elif tag in ['NN', 'NNS', 'NNP', 'NNPS']:
+            return wordnet.NOUN
+        elif tag in ['RB', 'RBR', 'RBS']:
+            return wordnet.ADV
+        elif tag in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
+            return wordnet.VERB
+        return
+
 
 # Driver Code
-url = "http://localhost:8983/solr/searchparty"
-deepernlp = DeeperPipeline(url, True)
-deepernlp.index_sentences()
-deepernlp.search("Malaysia and Japan")
+# url = "http://localhost:8983/solr/searchparty"
+# deepernlp = DeeperPipeline(url, True)
+# deepernlp.index_sentences()
+# deepernlp.search("Malaysia and Japan")
