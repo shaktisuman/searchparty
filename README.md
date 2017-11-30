@@ -104,6 +104,8 @@ To make this project work, we will need following setups.
     ```
 6. Download stanford parser
 7. Download stanford NER tagger
+8. Download Perceptron tagger
+nltk.download('averaged_perceptron_tagger')
 
 
 ---

@@ -22,7 +22,12 @@ class SolrSearch:
 
     def add(self, doc):
         """Index the document in solr."""
-        self.conn.add(id=doc["id"], tokens=doc["tokens"])
+        self.conn.add(id=doc["id"], tokens=doc["tokens"], stem=doc["stem"],
+                      parse=doc["parse"], headword=doc["headword"], named_entities=doc['named_entities'],
+                      POS=doc["POS"], lemma=doc["lemma"], hypernym=doc["hypernym"], hyponym=doc["hyponym"],
+                      substance_meronym=doc["substance_meronym"], member_meronym=doc["member_meronym"],
+                      part_meronym=doc["part_meronym"], substance_holonym=doc["substance_holonym"] ,
+                      member_holonym=doc["member_holonym"], part_holonym=doc["part_holonym"])
         self.conn.commit()
 
     def query(self, tokens):
