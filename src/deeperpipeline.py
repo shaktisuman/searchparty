@@ -111,27 +111,29 @@ class DeeperPipeline:
     def hypernym(self, sentence):
         """Return Wordnet based Hypernyms of words in a sentence."""
         hypernym_list = []
-        for words in sentence.split():
-            hypernyms = (wordnet.synsets(words))[0].hypernyms()
-            hypernym_list.append(hypernyms[0].name().split(".")[0])
+        for words in sentence:
+            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].hypernyms()) is not 0:
+                hypernym_list.append((wordnet.synsets(words))[0].hypernyms()[0].name().split(".")[0])
+            else:
+                hypernym_list.append("")
         return hypernym_list
     
     def hyponym(self, sentence):
         """Return Wordnet based Hyponyms of words in a sentence."""
         hyponym_list = []
-        for words in sentence.split():
-            hyponym_all = (wordnet.synsets(words))[0].hyponyms()
-            #Considering first hyponym in wordnet
-            hyponym_list.append(hyponym_all[0].name().split(".")[0])
+        for words in sentence:
+            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].hyponyms()) is not 0:
+                hyponym_list.append((wordnet.synsets(words))[0].hyponyms()[0].name().split(".")[0])
+            else:
+                hyponym_list.append("")
         return hyponym_list
     
     def substance_meronym(self, sentence):
         """Return Wordnet based Meronyms of words in a sentence."""
         substance_meronyms_list = []
-        for words in sentence.split():
-            meronyms = (wordnet.synsets(words))[0].substance_meronyms()
-            if len(meronyms) is not 0:
-                substance_meronyms_list.append(meronyms[0].name().split(".")[0])
+        for words in sentence:
+            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].substance_meronyms()) is not 0:
+                substance_meronyms_list.append((wordnet.synsets(words))[0].substance_meronyms()[0].name().split(".")[0])
             else:
                 substance_meronyms_list.append("")
         return substance_meronyms_list
@@ -139,10 +141,9 @@ class DeeperPipeline:
     def member_meronym(self, sentence):
         """Return Wordnet based Meronyms of words in a sentence."""
         member_meronyms_list = []
-        for words in sentence.split():
-            meronyms = (wordnet.synsets(words))[0].member_meronyms()
-            if len(meronyms) is not 0:
-                member_meronyms_list.append(meronyms[0].name().split(".")[0])
+        for words in sentence:
+            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].member_meronyms()) is not 0:
+                member_meronyms_list.append((wordnet.synsets(words))[0].member_meronyms()[0].name().split(".")[0])
             else:
                 member_meronyms_list.append("")
         return member_meronyms_list
@@ -150,10 +151,9 @@ class DeeperPipeline:
     def part_meronym(self, sentence):
         """Return Wordnet based Meronyms of words in a sentence."""
         part_meronyms_list = []
-        for words in sentence.split():
-            meronyms = (wordnet.synsets(words))[0].part_meronyms()
-            if len(meronyms) is not 0:
-                part_meronyms_list.append(meronyms[0].name().split(".")[0])
+        for words in sentence:
+            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].part_meronyms()) is not 0:
+                part_meronyms_list.append((wordnet.synsets(words))[0].part_meronyms()[0].name().split(".")[0])
             else:
                 part_meronyms_list.append("")
         return part_meronyms_list
@@ -161,10 +161,9 @@ class DeeperPipeline:
     def substance_holonym(self, sentence):
         """Return Wordnet based Holonyms of words in a sentence."""
         substance_holonym_list = []
-        for words in sentence.split():
-            holonyms = (wordnet.synsets(words))[0].substance_holonyms()
-            if len(holonyms) is not 0:
-                substance_holonym_list.append(holonyms[0].name().split(".")[0])
+        for words in sentence:
+            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].substance_holonyms()) is not 0:
+                substance_holonym_list.append((wordnet.synsets(words))[0].substance_holonyms()[0].name().split(".")[0])
             else:
                 substance_holonym_list.append("")
         return substance_holonym_list
@@ -172,28 +171,27 @@ class DeeperPipeline:
     def member_holonym(self, sentence):
         """Return Wordnet based Holonyms of words in a sentence."""
         member_holonym_list = []
-        for words in sentence.split():
-            holonyms = (wordnet.synsets(words))[0].member_holonyms()
-            if len(holonyms) is not 0:
-                member_holonym_list.append(holonyms[0].name().split(".")[0])
+        for words in sentence:
+            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].member_holonyms()) is not 0:
+                member_holonym_list.append((wordnet.synsets(words))[0].member_holonyms()[0].name().split(".")[0])
             else:
                 member_holonym_list.append("")
         return member_holonym_list
     
     def part_holonym(self, sentence):
         """Return Wordnet based Holonyms of words in a sentence."""
-        part_substance_holonym_list = []
-        for words in sentence.split():
-            holonyms = (wordnet.synsets(words))[0].part_holonyms()
-            if len(holonyms) is not 0:
-                part_substance_holonym_list.append(holonyms[0].name().split(".")[0])
+        part_holonym_list = []
+        for words in sentence:
+            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].part_holonyms()) is not 0:
+                part_holonym_list.append((wordnet.synsets(words))[0].part_holonyms()[0].name().split(".")[0])
             else:
-                part_substance_holonym_list.append("")
-        return part_substance_holonym_list
+                part_holonym_list.append("")
+        return part_holonym_list
 
 
 # Driver Code
-url = "http://localhost:8983/solr/searchparty"
+'''url = "http://localhost:8983/solr/searchparty"
 deepernlp = DeeperPipeline(url, True)
 deepernlp.index_sentences()
 deepernlp.search("Malaysia and Japan")
+'''
