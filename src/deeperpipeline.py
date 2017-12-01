@@ -87,7 +87,7 @@ class DeeperPipeline:
         """Return the list of stem for given sentence."""
         return [self.stemmer.stem(x) for x in sentence]
 
-    def lemma(self, sentence, POS):
+    def lemma(self, POS):
         """Return the list of lemmatized word for given sentence."""
         lemma = []
         for p in POS:
