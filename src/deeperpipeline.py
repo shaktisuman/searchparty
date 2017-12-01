@@ -50,7 +50,7 @@ class DeeperPipeline:
             dependency_parse, headword = self.dep_parse_and_headword(sentence)
             named_entities = self.ner_tag(sentence)
             POS = self.POS(sentence)
-            lemma = self.lemma(sentence, POS)
+            lemma = self.lemma(POS)
             hypernym = self.hypernym(sentence)
             hyponym = self.hyponym(sentence)
             substance_meronym = self.substance_meronym(sentence)
@@ -59,9 +59,13 @@ class DeeperPipeline:
             substance_holonym = self.substance_holonym(sentence)
             member_holonym = self.member_holonym(sentence)
             part_holonym = self.part_holonym(sentence)
-            doc = {'id': i, 'tokens': sentence, 'stem': stems,
-                   'parse': dependency_parse, 'headword': headword,
-                   'named_entities': named_entities, 'POS': POS, 'lemma': lemma, 'hypernym': hypernym, 'hyponym': hyponym, 'substance_meronym': substance_meronym, 'member_meronym': member_meronym, 'part_meronym': part_meronym, 'substance_holonym': substance_holonym, 'member_holonym': member_holonym, 'part_holonym': part_holonym}
+            doc = {'id': i, 'tokens': sentence, 'stem': stems, 'lemma': lemma,
+                   'parse': dependency_parse, 'headword': headword, 'POS': POS,
+                   'named_entities': named_entities, 'hypernym': hypernym,
+                   'hyponym': hyponym, 'substance_meronym': substance_meronym,
+                   'member_meronym': member_meronym, 'part_meronym': part_meronym,
+                   'substance_holonym': substance_holonym, 'member_holonym': member_holonym,
+                   'part_holonym': part_holonym, 'sentence': ' '.join(sentence)}
             self.solr.add(doc)
             # print doc
             i = i+1
@@ -112,82 +116,82 @@ class DeeperPipeline:
             if y != 'O':
                 named_entities.append((x, y))
         return named_entities
-    
+
     def hypernym(self, sentence):
         """Return Wordnet based Hypernyms of words in a sentence."""
         hypernym_list = []
         for words in sentence:
-            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].hypernyms()) is not 0:
+            if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].hypernyms()) is not 0:
                 hypernym_list.append((wordnet.synsets(words))[0].hypernyms()[0].name().split(".")[0])
             else:
                 hypernym_list.append("")
         return hypernym_list
-    
+
     def hyponym(self, sentence):
         """Return Wordnet based Hyponyms of words in a sentence."""
         hyponym_list = []
         for words in sentence:
-            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].hyponyms()) is not 0:
+            if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].hyponyms()) is not 0:
                 hyponym_list.append((wordnet.synsets(words))[0].hyponyms()[0].name().split(".")[0])
             else:
                 hyponym_list.append("")
         return hyponym_list
-    
+
     def substance_meronym(self, sentence):
         """Return Wordnet based Meronyms of words in a sentence."""
         substance_meronyms_list = []
         for words in sentence:
-            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].substance_meronyms()) is not 0:
+            if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].substance_meronyms()) is not 0:
                 substance_meronyms_list.append((wordnet.synsets(words))[0].substance_meronyms()[0].name().split(".")[0])
             else:
                 substance_meronyms_list.append("")
         return substance_meronyms_list
-    
+
     def member_meronym(self, sentence):
         """Return Wordnet based Meronyms of words in a sentence."""
         member_meronyms_list = []
         for words in sentence:
-            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].member_meronyms()) is not 0:
+            if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].member_meronyms()) is not 0:
                 member_meronyms_list.append((wordnet.synsets(words))[0].member_meronyms()[0].name().split(".")[0])
             else:
                 member_meronyms_list.append("")
         return member_meronyms_list
-    
+
     def part_meronym(self, sentence):
         """Return Wordnet based Meronyms of words in a sentence."""
         part_meronyms_list = []
         for words in sentence:
-            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].part_meronyms()) is not 0:
+            if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].part_meronyms()) is not 0:
                 part_meronyms_list.append((wordnet.synsets(words))[0].part_meronyms()[0].name().split(".")[0])
             else:
                 part_meronyms_list.append("")
         return part_meronyms_list
-    
+
     def substance_holonym(self, sentence):
         """Return Wordnet based Holonyms of words in a sentence."""
         substance_holonym_list = []
         for words in sentence:
-            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].substance_holonyms()) is not 0:
+            if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].substance_holonyms()) is not 0:
                 substance_holonym_list.append((wordnet.synsets(words))[0].substance_holonyms()[0].name().split(".")[0])
             else:
                 substance_holonym_list.append("")
         return substance_holonym_list
-    
+
     def member_holonym(self, sentence):
         """Return Wordnet based Holonyms of words in a sentence."""
         member_holonym_list = []
         for words in sentence:
-            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].member_holonyms()) is not 0:
+            if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].member_holonyms()) is not 0:
                 member_holonym_list.append((wordnet.synsets(words))[0].member_holonyms()[0].name().split(".")[0])
             else:
                 member_holonym_list.append("")
         return member_holonym_list
-    
+
     def part_holonym(self, sentence):
         """Return Wordnet based Holonyms of words in a sentence."""
         part_holonym_list = []
         for words in sentence:
-            if len(wordnet.synsets(words)) is not 0 and  len((wordnet.synsets(words))[0].part_holonyms()) is not 0:
+            if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].part_holonyms()) is not 0:
                 part_holonym_list.append((wordnet.synsets(words))[0].part_holonyms()[0].name().split(".")[0])
             else:
                 part_holonym_list.append("")
