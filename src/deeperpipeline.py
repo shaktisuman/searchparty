@@ -39,8 +39,8 @@ class DeeperPipeline:
         self.stemmer = PorterStemmer()
         self.lemmatizer = WordNetLemmatizer()
         self.dep_parser = StanfordDependencyParser(model_path='edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz', java_options=u'-mx4g')
-        self.parser = StanfordParser(model_path="edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz")
-        self.nertagger = StanfordNERTagger('english.muc.7class.distsim.crf.ser.gz')
+        # self.parser = StanfordParser(model_path="edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz")
+        # self.nertagger = StanfordNERTagger('english.muc.7class.distsim.crf.ser.gz')
 
     def index_sentences(self):
         """Index the sentences of the corpus."""
@@ -48,7 +48,7 @@ class DeeperPipeline:
         for sentence in self.getSentences():
             stems = self.stem(sentence)
             dependency_parse, headword = self.dep_parse_and_headword(sentence)
-            named_entities = self.ner_tag(sentence)
+            # named_entities = self.ner_tag(sentence)
             POS = self.POS(sentence)
             lemma = self.lemma(POS)
             hypernym = self.hypernym(sentence)
@@ -59,10 +59,10 @@ class DeeperPipeline:
             substance_holonym = self.substance_holonym(sentence)
             member_holonym = self.member_holonym(sentence)
             part_holonym = self.part_holonym(sentence)
-            doc = {'id': i, 'tokens': sentence, 'stem': stems, 'lemma': lemma,
-                   'parse': dependency_parse, 'headword': headword, 'POS': POS,
-                   'named_entities': named_entities, 'hypernym': hypernym,
-                   'hyponym': hyponym, 'substance_meronym': substance_meronym,
+            doc = {'id': i, 'tokens': sentence, 'stems': stems, 'lemma': lemma,
+                   'phrases': dependency_parse, 'headword': headword, #'named_entities': named_entities,
+                    'pos': POS, 'hypernyms': hypernym,
+                   'hyponyms': hyponym, 'substance_meronym': substance_meronym,
                    'member_meronym': member_meronym, 'part_meronym': part_meronym,
                    'substance_holonym': substance_holonym, 'member_holonym': member_holonym,
                    'part_holonym': part_holonym, 'sentence': ' '.join(sentence)}
