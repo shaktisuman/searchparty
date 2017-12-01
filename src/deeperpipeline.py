@@ -38,7 +38,7 @@ class DeeperPipeline:
         self.testrun = testrun
         self.stemmer = PorterStemmer()
         self.lemmatizer = WordNetLemmatizer()
-        self.dep_parser = StanfordDependencyParser(model_path='edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz')
+        self.dep_parser = StanfordDependencyParser(model_path='edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz', java_options=u'-mx4g')
         self.parser = StanfordParser(model_path="edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz")
         self.nertagger = StanfordNERTagger('english.muc.7class.distsim.crf.ser.gz')
 
