@@ -423,6 +423,7 @@
     Start of fields added for Search Party
    -->
   <field indexed="true" stored="true" name="tokens" type="text_general"/>
+  <field indexed="false" stored="true" name="sentence" type="text_general"/>
   <field indexed="true" stored="true" name="lemmas" type="text_general"/>
   <field indexed="true" stored="true" name="stems" type="text_general"/>
   <field indexed="true" stored="true" name="pos" type="text_general"/>
@@ -436,7 +437,7 @@
   <field indexed="true" stored="true" name="part_holonym" type="text_general"/>
   <field indexed="true" stored="true" name="headword" type="text_general"/>
   <field indexed="true" stored="true" name="phrases" type="text_general"/>
-  
+
   <!--
     End of fields added for Search Party
    -->
