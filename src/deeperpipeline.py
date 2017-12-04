@@ -211,8 +211,12 @@ class DeeperPipeline:
 
 
 # Driver Code
-'''url = "http://localhost:8983/solr/searchparty"
-deepernlp = DeeperPipeline(url, True)
-deepernlp.index_sentences()
+url = "http://localhost:8983/solr/searchparty"
+deepernlp = DeeperPipeline(url, False)
+try:
+    deepernlp.index_sentences()
+except AssertionError:
+    print "An assertion Error caught"
+
 deepernlp.search("Malaysia and Japan")
-'''
+
