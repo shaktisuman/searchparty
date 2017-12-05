@@ -1,12 +1,10 @@
 """Module represents Shallow NLP pipeline."""
 import index
 import os
-from nltk.tag import StanfordNERTagger
 from nltk.corpus import reuters
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.parse.stanford import StanfordDependencyParser
-from nltk.parse.stanford import StanfordParser
 from nltk.tokenize import word_tokenize
 from nltk.tag.perceptron import PerceptronTagger
 from nltk.corpus import wordnet
@@ -39,36 +37,38 @@ class DeeperPipeline:
         self.stemmer = PorterStemmer()
         self.lemmatizer = WordNetLemmatizer()
         self.dep_parser = StanfordDependencyParser(model_path='edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz', java_options=u'-mx4g')
-        # self.parser = StanfordParser(model_path="edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz")
-        # self.nertagger = StanfordNERTagger('english.muc.7class.distsim.crf.ser.gz')
 
     def index_sentences(self):
         """Index the sentences of the corpus."""
         i = 0
         for sentence in self.getSentences():
-            stems = self.stem(sentence)
-            dependency_parse, headword = self.dep_parse_and_headword(sentence)
-            # named_entities = self.ner_tag(sentence)
-            POS = self.POS(sentence)
-            lemma = self.lemma(POS)
-            hypernym = self.hypernym(sentence)
-            hyponym = self.hyponym(sentence)
-            substance_meronym = self.substance_meronym(sentence)
-            member_meronym = self.member_meronym(sentence)
-            part_meronym = self.part_meronym(sentence)
-            substance_holonym = self.substance_holonym(sentence)
-            member_holonym = self.member_holonym(sentence)
-            part_holonym = self.part_holonym(sentence)
-            doc = {'id': i, 'tokens': sentence, 'stems': stems, 'lemma': lemma,
-                   'phrases': dependency_parse, 'headword': headword, #'named_entities': named_entities,
-                    'pos': POS, 'hypernyms': hypernym,
-                   'hyponyms': hyponym, 'substance_meronym': substance_meronym,
-                   'member_meronym': member_meronym, 'part_meronym': part_meronym,
-                   'substance_holonym': substance_holonym, 'member_holonym': member_holonym,
-                   'part_holonym': part_holonym, 'sentence': ' '.join(sentence)}
-            self.solr.add(doc)
-            # print doc
-            i = i+1
+            try:
+                stems = self.stem(sentence)
+                dependency_parse, headword = self.dep_parse_and_headword(sentence)
+                POS = self.POS(sentence)
+                lemma = self.lemma(POS)
+                hypernym = self.hypernym(sentence)
+                hyponym = self.hyponym(sentence)
+                substance_meronym = self.substance_meronym(sentence)
+                member_meronym = self.member_meronym(sentence)
+                part_meronym = self.part_meronym(sentence)
+                substance_holonym = self.substance_holonym(sentence)
+                member_holonym = self.member_holonym(sentence)
+                part_holonym = self.part_holonym(sentence)
+                doc = {'id': i, 'tokens': sentence, 'stems': stems, 'lemma': lemma,
+                       'phrases': dependency_parse, 'headword': headword,
+                        'pos': POS, 'hypernyms': hypernym,
+                       'hyponyms': hyponym, 'substance_meronym': substance_meronym,
+                       'member_meronym': member_meronym, 'part_meronym': part_meronym,
+                       'substance_holonym': substance_holonym, 'member_holonym': member_holonym,
+                       'part_holonym': part_holonym, 'sentence': ' '.join(sentence)}
+                self.solr.add(doc)
+            except AssertionError:
+                print "An assertion error occured"
+            except:
+                print "An error occurred."
+            finally:
+                i = i+1
 
     def getSentences(self):
         """Return 100 sentences if testrun, all sentences otherwise."""
@@ -213,10 +213,4 @@ class DeeperPipeline:
 # Driver Code
 url = "http://localhost:8983/solr/searchparty"
 deepernlp = DeeperPipeline(url, False)
-try:
-    deepernlp.index_sentences()
-except AssertionError:
-    print "An assertion Error caught"
-
-deepernlp.search("Malaysia and Japan")
-
+deepernlp.index_sentences()
