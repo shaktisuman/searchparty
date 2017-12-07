@@ -52,7 +52,7 @@ class SolrSearch:
         data = urllib.quote(query_url, safe="%/\()+,'\"&$:?=^!@$#*")
         connection = urlopen(data)
         response = eval(connection.read())
-        print "query formed: ", query_url
+        # print "query formed: ", query_url
         # print response['response']['numFound'], "documents found."
         return response['response']['docs']
 

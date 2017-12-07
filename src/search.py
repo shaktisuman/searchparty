@@ -20,15 +20,14 @@ class Search:
 
         def shallow_search(self, sentences):
             """Return top 10 relevant search result for given string."""
-            # workbook = xlsxwriter.Workbook(str(datetime.datetime.now())+"_shallownlp"+ '.xlsx')
-            # worksheet = self.create_excel(workbook)
-            worksheet = {}
+            workbook = xlsxwriter.Workbook(str(datetime.datetime.now())+"_shallownlp"+ '.xlsx')
+            worksheet = self.create_excel(workbook)
             i = 0
             for sentence in sentences:
                 docs = self.solr.query("tokens:"+"+".join(word_tokenize(sentence)))
                 self.write_to_excel(sentence, docs, i, worksheet)
                 i += 1
-            # workbook.close()
+            workbook.close()
 
 
         def deeper_search(self, sentences):
@@ -39,9 +38,8 @@ class Search:
               # ]
             wts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             self.solr.setWeigtage(wts)
-            # workbook = xlsxwriter.Workbook(str(datetime.datetime.now())+"_deepernlp"+ '.xlsx')
-            # worksheet = self.create_excel(workbook)
-            worksheet = {}
+            workbook = xlsxwriter.Workbook(str(datetime.datetime.now())+"_deepernlp"+ '.xlsx')
+            worksheet = self.create_excel(workbook)
             i = 0
             for sentence in sentences:
                 tokens = word_tokenize(sentence)
@@ -60,7 +58,6 @@ class Search:
                 if len(hyponyms) > 0:
                     query += ',hyponyms:' + "+".join(hyponyms)
                 s_meronyms = filter(None, self.deepernlp.substance_meronym(tokens))
-                # print s_meronyms
                 if len(s_meronyms) > 0:
                     query += ',substance_meronym:' + "+".join(s_meronyms)
                 m_meronyms = filter(None, self.deepernlp.member_meronym(tokens))
@@ -82,7 +79,7 @@ class Search:
                 docs = self.solr.query(query)
                 self.write_to_excel(sentence, docs, i, worksheet)
                 i += 1
-            # workbook.close()
+            workbook.close()
 
         def custom_search(self, sentences):
             """Return top 10 relevant search result for given string."""
@@ -92,9 +89,8 @@ class Search:
               # ]
             wts = [2, -1, -1, -1, -1, 0, 0, 0, -1,-1,-1,-1,-1,-1,1]
             self.solr.setWeigtage(wts)
-            # workbook = xlsxwriter.Workbook(str(datetime.datetime.now())+"_custom"+ '.xlsx')
-            # worksheet = self.create_excel(workbook)
-            worksheet = {}
+            workbook = xlsxwriter.Workbook(str(datetime.datetime.now())+"_custom"+ '.xlsx')
+            worksheet = self.create_excel(workbook)
             i = 0
             for sentence in sentences:
                 tokens = word_tokenize(sentence)
@@ -103,20 +99,14 @@ class Search:
                 query += ',stems:'+ "+".join(self.deepernlp.stem(tokens))
                 POS = self.deepernlp.POS(tokens)
                 query += ',lemma:' + "+".join(self.deepernlp.lemma(POS))
-                # hypernyms = filter(None, self.deepernlp.hypernym(tokens))
-                # hyponyms = filter(None, self.deepernlp.hyponym(tokens))
-                # s_meronyms = filter(None, self.deepernlp.substance_meronym(tokens))
-                # m_meronyms = filter(None, self.deepernlp.member_meronym(tokens))
-                # p_meronyms = filter(None, self.deepernlp.part_meronym(tokens))
-                # s_holonyms = filter(None, self.deepernlp.substance_holonym(tokens))
-                # m_holonyms = filter(None, self.deepernlp.member_holonym(tokens))
-                # p_holonyms = filter(None, self.deepernlp.part_holonym(tokens))
-
-                # print query
+                hypernyms = filter(None, self.deepernlp.hypernym(tokens))
+                hyponyms = filter(None, self.deepernlp.hyponym(tokens))
+                query += ',hypernyms:' + "+".join(hypernyms)
+                query += ',hyponyms:' + "+".join(hyponyms)
                 docs = self.solr.query(query)
                 self.write_to_excel(sentence, docs, i, worksheet)
                 i += 1
-            # workbook.close()
+            workbook.close()
 
         def create_excel(self, workbook):
             """Create an new Excel file and add a worksheet."""
@@ -128,40 +118,39 @@ class Search:
             highlight.set_bold()
             worksheet.set_column(0, 0, 20, highlight)
             worksheet.write(0, 1, "Sentence", )
-            # worksheet.write(0, 2, "Score")
-            worksheet.write(0, 2, "Relevance")
+            worksheet.write(0, 2, "ID")
+            worksheet.write(0, 3, "Relevance")
             return worksheet
 
         def write_to_excel(self, query, results, i, worksheet):
-            # worksheet.write((1 + (11*i)), 0, "Query")
-            # worksheet.merge_range((2 + (11*i)), 0, (11 + (11*i)), 0, "Results")
-            # worksheet.write((1 + (11*i)), 1, query)
-            # row = (2 + (11*i))
+            worksheet.write((1 + (11*i)), 0, "Query")
+            worksheet.merge_range((2 + (11*i)), 0, (11 + (11*i)), 0, "Results")
+            worksheet.write((1 + (11*i)), 1, query)
+            row = (2 + (11*i))
             for result in results:
-                print result["sentence"][0]
-                # worksheet.write(row, 1, result["sentence"][0])
-                # row += 1
+                # print result["sentence"][0]
+                worksheet.write(row, 1, result["sentence"][0])
+                worksheet.write(row, 2, result["id"])
+                row += 1
 
 
 # Driver Code
-url = "http://129.110.92.21:8983/solr/searchparty"
-s = Search(url)
-query = []
-# query.append("MTBE plants in Canada")
-# query.append("New York liquor sales in March")
-# query.append("effects of fall in temperature")
-# query.append("who bought raapseed canadian")
-#query.append("largest copper manufacturer")  #3
-# query.append("Scrap consumption of Brass Mill")
-# query.append("pension benefits of bowater")
-# query.append("most profitable bank of Japan")
-# query.append("thai metallic exports")
-query.append("People having good time in US") #1
-# query.append("French agreement on foreign exchange rates") #2
-# query.append("Bowater's profit exceeds market expectation") #4
-#query.append("liquidity in market guiding interest rates") #5
-#query.append("attacks on ports of Newcastle")  #6
+# url = "http://129.110.92.21:8983/solr/searchparty"
+# s = Search(url)
+# query = []
 
-s.shallow_search(query)
-s.deeper_search(query)
-s.custom_search(query)
+# query.append("Sugar factory shut because of importing sugar") #2
+# query.append("largest copper manufacturer")  #3
+# query.append("paris agreement on foreign exchange rates") #4
+# query.append("Bowaters profit exceeds market expectation") #5
+# query.append("People having good time in US") #1
+# query.append("liquidity in market guiding interest rates") #6
+# query.append("attacks on ports of Newcastle")  #7
+# query.append("Why did Korea switch back to U S corn supply?") #8
+# query.append("India's target of foodgrain production by 1990") #9
+# query.append("oil companies to decide oil prices in Singapore")
+
+
+# s.shallow_search(query)
+# s.deeper_search(query)
+# s.custom_search(query)
