@@ -52,6 +52,7 @@ class SolrSearch:
 
     def setWeigtage(self, weightage):
         """Return weightage for the query."""
+        self.weightage = {}
         for idx, val in enumerate(weightage):
             if val != -1:
                 self.weightage[self.fields[idx]] = val

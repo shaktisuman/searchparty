@@ -42,8 +42,7 @@ class DeeperPipeline:
         for fileid in reuters.fileids():
             i = 0
             for sentence in self.getSentences(fileid):
-                try
-                    sentence
+                try:
                     stems = self.stem(sentence)
                     dependency_parse, headword = self.dep_parse_and_headword(sentence)
                     POS = self.POS(sentence)
@@ -57,7 +56,7 @@ class DeeperPipeline:
                     member_holonym = self.member_holonym(sentence)
                     part_holonym = self.part_holonym(sentence)
                     synonyms = self.synonyms(sentence)
-                    doc = {'id': fileid+"_"+i , 'tokens': sentence, 'stems': stems, 'lemma': lemma,
+                    doc = {'id': fileid+"_"+str(i) , 'tokens': sentence, 'stems': stems, 'lemma': lemma,
                            'phrases': dependency_parse, 'headword': headword,
                             'pos': POS, 'hypernyms': hypernym,
                            'hyponyms': hyponym, 'substance_meronym': substance_meronym,
@@ -211,6 +210,6 @@ class DeeperPipeline:
         return set(synonym_list)
 
 # Driver Code
-url = "http://localhost:8983/solr/searchparty"
-deepernlp = DeeperPipeline(url, False)
-deepernlp.index_sentences()
+# url = "http://localhost:8983/solr/searchparty"
+# deepernlp = DeeperPipeline(url, False)
+# deepernlp.index_sentences()
