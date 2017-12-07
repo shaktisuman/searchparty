@@ -23,11 +23,13 @@ class Search:
             workbook = xlsxwriter.Workbook(str(datetime.datetime.now())+"_shallownlp"+ '.xlsx')
             worksheet = self.create_excel(workbook)
             i = 0
+            docs = []
             for sentence in sentences:
                 docs = self.solr.query("tokens:"+"+".join(word_tokenize(sentence)))
                 self.write_to_excel(sentence, docs, i, worksheet)
                 i += 1
             workbook.close()
+            return docs
 
 
         def deeper_search(self, sentences):
@@ -41,6 +43,7 @@ class Search:
             workbook = xlsxwriter.Workbook(str(datetime.datetime.now())+"_deepernlp"+ '.xlsx')
             worksheet = self.create_excel(workbook)
             i = 0
+            docs = []
             for sentence in sentences:
                 tokens = word_tokenize(sentence)
                 query = 'tokens:'+ "+".join(tokens)
@@ -80,6 +83,7 @@ class Search:
                 self.write_to_excel(sentence, docs, i, worksheet)
                 i += 1
             workbook.close()
+            return docs
 
         def custom_search(self, sentences):
             """Return top 10 relevant search result for given string."""
@@ -92,6 +96,7 @@ class Search:
             workbook = xlsxwriter.Workbook(str(datetime.datetime.now())+"_custom"+ '.xlsx')
             worksheet = self.create_excel(workbook)
             i = 0
+            docs = []
             for sentence in sentences:
                 tokens = word_tokenize(sentence)
                 query = 'tokens:'+ "+".join(tokens)
@@ -107,6 +112,7 @@ class Search:
                 self.write_to_excel(sentence, docs, i, worksheet)
                 i += 1
             workbook.close()
+            return docs
 
         def create_excel(self, workbook):
             """Create an new Excel file and add a worksheet."""
@@ -133,11 +139,29 @@ class Search:
                 worksheet.write(row, 2, result["id"])
                 row += 1
 
+        def search(self, sentence, id=0):
+            sentences = [sentence]
+            results = []
+            if id == 1:
+                print 'Running deeper NLP search ...'
+                results = self.deeper_search(sentences)
+            elif id == 2:
+                print 'Running custom NLP search ...'
+                results = self.custom_search(sentences)
+            else:
+                print 'Running shallow NLP search ...'
+                results = self.shallow_search(sentences)
+            print "Top 10 results:"
+            for result in results:
+                print result["id"], ": ", result["sentence"][0]
+
+
 
 # Driver Code
-# url = "http://129.110.92.21:8983/solr/searchparty"
-# s = Search(url)
-# query = []
+url = "http://129.110.92.21:8983/solr/searchparty"
+s = Search(url)
+# s.search("largest copper manufacturer", 2)
+query = []
 
 # query.append("Sugar factory shut because of importing sugar") #2
 # query.append("largest copper manufacturer")  #3
@@ -150,7 +174,8 @@ class Search:
 # query.append("India's target of foodgrain production by 1990") #9
 # query.append("oil companies to decide oil prices in Singapore")
 
+query.append("effects of sudden fall in temperature")
 
-# s.shallow_search(query)
-# s.deeper_search(query)
-# s.custom_search(query)
+s.shallow_search(query)
+s.deeper_search(query)
+s.custom_search(query)

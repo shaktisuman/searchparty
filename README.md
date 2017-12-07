@@ -68,13 +68,13 @@ shallownlp = sp.ShallowPipeline(url, False)
 shallownlp.index_sentence('This is a demo sentence', 'demo_1')
 ```
 
-To search by matching the tokens of the query, you can use search.shallow_search as shown below.
+To search by matching the tokens of the query, you can use search function as shown below.
 
 ```python
 import search
 url = "http://localhost:8983/solr/searchparty"
 s = search.Search(url)
-
+>>> s.search("People having good time in US", 0)
 ```
 
 ### 3. Deeper NLP pipeline:  
@@ -114,17 +114,17 @@ To index individual sentence you can follow this code
 >>> import deeperpipeline as dp
 >>> url = "http://localhost:8983/solr/searchparty"
 >>> deepernlp = dp.DeeperPipeline(url, False)
->>> deepernlp.index_sentence('This is a demo sentence', 'demo_2')
+>>> deepernlp.index_sentence('largest copper manufacturer', 'demo_2')
 ```
 
-To search by matching full feature vector of the query, you can use search.deeper_search as shown below.
+To search by matching full feature vector of the query, you can use search function as shown below.
 
 ```python
 >>> import search
 >>> url = "http://localhost:8983/solr/searchparty"
 >>> s = search.Search(url)
+>>> s.search("largest copper manufacturer", 1)
 ```
-
 
 #### 4. Improve result:
 
@@ -133,6 +133,16 @@ Improve the shallow NLP pipeline results using a combination of deeper NLP pipel
 
 ###### Implementation  
 
+We have improved the shallow NLP pipeline by including the lemmas, stems, hypernyms, holonyms and synonyms.
+
+To search by custom feature vector, you can use search function as shown below.
+
+```python
+>>> import search
+>>> url = "http://localhost:8983/solr/searchparty"
+>>> s = search.Search(url)
+>>> s.search("largest copper manufacturer", 1)
+```
 
 
 ---
@@ -169,12 +179,7 @@ nltk.download('averaged_perceptron_tagger')
 ---
 ## References
 
-- [ ] To be added..
-
 1. https://blog.manash.me/configuring-stanford-parser-and-stanford-ner-tagger-with-nltk-in-python-on-windows-f685483c374a
-
-#### Note:
-You are free to implement or use a third-party tool such as:
-1. NLTK: http://www.nltk.org/
-2. Stanford NLP: http://nlp.stanford.edu/software/corenlp.shtml
-3. Apache OpenNLP: http://opennlp.apache.org/
+2. NLTK: http://www.nltk.org/
+3. Stanford NLP: http://nlp.stanford.edu/software/corenlp.shtml
+4. Apache OpenNLP: http://opennlp.apache.org/
