@@ -3,3 +3,4 @@ solr-7.1.0
 *.zip
 resources/stanford-ner-2017-06-09
 resources/stanford-parser-full-2017-06-09
+*.xlsx

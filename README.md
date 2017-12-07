@@ -89,7 +89,7 @@ To make this project work, we will need following setups.
 
 1.  Install Python 2.7
 2.  Download reuters corpus.
-
+pip install nltk
     ```python  
     >>> import nltk
     >>> nltk.download('reuters')
@@ -106,6 +106,8 @@ To make this project work, we will need following setups.
 7. Download stanford NER tagger
 8. Download Perceptron tagger
 nltk.download('averaged_perceptron_tagger')
+9. Import XlsxWriter
+   sudo pip install XlsxWriter
 
 
 ---

@@ -1,11 +1,10 @@
-"""Module represents Shallow NLP pipeline."""
+"""Module represents Deeper NLP pipeline."""
 import index
 import os
 from nltk.corpus import reuters
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.parse.stanford import StanfordDependencyParser
-from nltk.tokenize import word_tokenize
 from nltk.tag.perceptron import PerceptronTagger
 from nltk.corpus import wordnet
 
@@ -16,7 +15,7 @@ os.environ['STANFORD_MODELS'] = '../resources/stanford-ner-2017-06-09/classifier
 
 
 class DeeperPipeline:
-    """Implementing ShallowPipeline.
+    """Implementing DeeperPipeline.
 
     Attributes:
         url     The Solr URL for the collection
@@ -76,12 +75,6 @@ class DeeperPipeline:
             return reuters.sents()[0:5]
         else:
             return reuters.sents()
-
-    def search(self, sentence):
-        """Return top 10 relevant search result for given string."""
-        docs = self.solr.query(word_tokenize(sentence))
-        for doc in docs:
-            print " ".join(doc["tokens"])
 
     def stem(self, sentence):
         """Return the list of stem for given sentence."""
@@ -211,6 +204,6 @@ class DeeperPipeline:
 
 
 # Driver Code
-url = "http://localhost:8983/solr/searchparty"
-deepernlp = DeeperPipeline(url, False)
-deepernlp.index_sentences()
+# url = "http://129.110.92.21:8983/solr/searchparty"
+# deepernlp = DeeperPipeline(url, False)
+# deepernlp.index_sentences()
