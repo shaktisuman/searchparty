@@ -50,6 +50,33 @@ We used solrpy, a python client for the Solr search service to index the word ve
 
 **shallowpipeline.py** file includes the implementation of shallow nlp pipeline as per task 2.
 
+Here is a sequence of commands to index the whole Reuters Corpus
+
+```python
+import shallowpipeline as sp
+url = "http://localhost:8983/solr/searchparty"
+shallownlp = sp.ShallowPipeline(url, False)
+shallownlp.index_sentences()
+```
+
+To index individual sentence you can follow this code
+
+```python
+import shallowpipeline as sp
+url = "http://localhost:8983/solr/searchparty"
+shallownlp = sp.ShallowPipeline(url, False)
+shallownlp.index_sentence('This is a demo sentence', 'demo_1')
+```
+
+To search by matching the tokens of the query, you can use search.shallow_search as shown below.
+
+```python
+import search
+url = "http://localhost:8983/solr/searchparty"
+s = search.Search(url)
+
+```
+
 ### 3. Deeper NLP pipeline:  
 
 ###### Instruction  
@@ -58,19 +85,46 @@ Implement a deeper NLP pipeline to perform the following: o Semantic search inde
   - [x] Tokenize the sentences into words
   - [x] Lemmatize the words to extract lemmas as features
   - [x] Stem the words to extract stemmed words as features
-  - [ ] Part-of-speech (POS) tag the words to extract POS tag features
-  - [ ] Syntactically parse the sentence and extract phrases, head words, OR dependency parse relations as features
-  - [ ] Using WordNet, extract hypernymns, hyponyms, meronyms, AND holonyms as features
-  - [ ] Index the various NLP features as separate search fields in a search index such as Lucene or SOLR
+  - [x] Part-of-speech (POS) tag the words to extract POS tag features
+  - [x] Syntactically parse the sentence and extract phrases, head words, OR dependency parse relations as features
+  - [x] Using WordNet, extract hypernymns, hyponyms, meronyms, AND holonyms as features
+  - [x] Index the various NLP features as separate search fields in a search index such as Lucene or SOLR
 - Natural language query parsing and search
-  - [ ] Run the above described deeper NLP on an user’s input natural language and extract search query features
-  - [ ] Run a search/match against the separate or combination of search index fields created from the corpus
+  - [x] Run the above described deeper NLP on an user’s input natural language and extract search query features
+  - [x] Run a search/match against the separate or combination of search index fields created from the corpus
 - Evaluate the results of at least 10 search queries for the top-10 returned sentence matches
 
 
 ###### Implementation  
 
-- [ ] To be added..
+**deeperpipeline.py** file includes the implementation of shallow nlp pipeline as per task 2.
+
+Here is a sequence of commands to index the whole Reuters Corpus
+
+```python
+>>> import deeperpipeline as dp
+>>> url = "http://localhost:8983/solr/searchparty"
+>>> deepernlp = dp.DeeperPipeline(url, False)
+>>> deepernlp.index_sentences()
+```
+
+To index individual sentence you can follow this code
+
+```python
+>>> import deeperpipeline as dp
+>>> url = "http://localhost:8983/solr/searchparty"
+>>> deepernlp = dp.DeeperPipeline(url, False)
+>>> deepernlp.index_sentence('This is a demo sentence', 'demo_2')
+```
+
+To search by matching full feature vector of the query, you can use search.deeper_search as shown below.
+
+```python
+>>> import search
+>>> url = "http://localhost:8983/solr/searchparty"
+>>> s = search.Search(url)
+```
+
 
 #### 4. Improve result:
 
@@ -79,7 +133,7 @@ Improve the shallow NLP pipeline results using a combination of deeper NLP pipel
 
 ###### Implementation  
 
-- [ ] To be added..
+
 
 ---
 
@@ -107,7 +161,9 @@ pip install nltk
 8. Download Perceptron tagger
 nltk.download('averaged_perceptron_tagger')
 9. Import XlsxWriter
-   sudo pip install XlsxWriter
+   ```bash
+   $ sudo pip install XlsxWriter
+   ```
 
 
 ---
