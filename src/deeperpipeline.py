@@ -7,6 +7,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.parse.stanford import StanfordDependencyParser
 from nltk.tag.perceptron import PerceptronTagger
 from nltk.corpus import wordnet
+from nltk.tokenize import word_tokenize
 
 
 os.environ['CLASSPATH'] = '../resources/stanford-ner-2017-06-09:../resources/stanford-parser-full-2017-06-09'
@@ -35,6 +36,7 @@ class DeeperPipeline:
         self.testrun = testrun
         self.stemmer = PorterStemmer()
         self.lemmatizer = WordNetLemmatizer()
+        self.tagger = PerceptronTagger()
         self.dep_parser = StanfordDependencyParser(model_path='edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz', java_options=u'-mx4g')
 
     def index_sentences(self):
@@ -42,35 +44,43 @@ class DeeperPipeline:
         for fileid in reuters.fileids():
             i = 0
             for sentence in self.getSentences(fileid):
-                try:
-                    stems = self.stem(sentence)
-                    dependency_parse, headword = self.dep_parse_and_headword(sentence)
-                    POS = self.POS(sentence)
-                    lemma = self.lemma(POS)
-                    hypernym = self.hypernym(sentence)
-                    hyponym = self.hyponym(sentence)
-                    substance_meronym = self.substance_meronym(sentence)
-                    member_meronym = self.member_meronym(sentence)
-                    part_meronym = self.part_meronym(sentence)
-                    substance_holonym = self.substance_holonym(sentence)
-                    member_holonym = self.member_holonym(sentence)
-                    part_holonym = self.part_holonym(sentence)
-                    synonyms = self.synonyms(sentence)
-                    doc = {'id': fileid+"_"+str(i) , 'tokens': sentence, 'stems': stems, 'lemma': lemma,
-                           'phrases': dependency_parse, 'headword': headword,
-                            'pos': POS, 'hypernyms': hypernym,
-                           'hyponyms': hyponym, 'substance_meronym': substance_meronym,
-                           'member_meronym': member_meronym, 'part_meronym': part_meronym,
-                           'substance_holonym': substance_holonym, 'member_holonym': member_holonym,
-                           'part_holonym': part_holonym, 'sentence': ' '.join(sentence),
-                           'synonyms': synonyms}
-                    self.solr.add(doc)
-                except AssertionError:
-                    print "An assertion error occured"
-                except:
-                    print "An error occurred."
-                finally:
-                    i = i+1
+                self.index_tokens(sentence, fileid+"_"+str(i))
+                i = i+1
+
+    def index_sentence(self, sentence, id):
+        self.index_tokens(word_tokenize(sentence), id)
+
+    def index_tokens(self, sentence, id):
+        try:
+            stems = self.stem(sentence)
+            dependency_parse, headword = self.dep_parse_and_headword(sentence)
+            POS = self.POS(sentence)
+            lemma = self.lemma(POS)
+            hypernym = self.hypernym(sentence)
+            hyponym = self.hyponym(sentence)
+            substance_meronym = self.substance_meronym(sentence)
+            member_meronym = self.member_meronym(sentence)
+            part_meronym = self.part_meronym(sentence)
+            substance_holonym = self.substance_holonym(sentence)
+            member_holonym = self.member_holonym(sentence)
+            part_holonym = self.part_holonym(sentence)
+            synonyms = self.synonyms(sentence)
+            doc = {'id': id , 'tokens': sentence, 'stems': stems, 'lemma': lemma,
+                   'phrases': dependency_parse, 'headword': headword,
+                    'pos': POS, 'hypernyms': hypernym,
+                   'hyponyms': hyponym, 'substance_meronym': substance_meronym,
+                   'member_meronym': member_meronym, 'part_meronym': part_meronym,
+                   'substance_holonym': substance_holonym, 'member_holonym': member_holonym,
+                   'part_holonym': part_holonym, 'sentence': ' '.join(sentence),
+                   'synonyms': synonyms}
+            self.solr.add(doc)
+        except AssertionError:
+            print "An assertion error occured"
+        except:
+            print "An error occurred."
+        finally :
+            print "continuing.."
+
 
     def getSentences(self, fileid):
         """Return 100 sentences if testrun, all sentences otherwise."""
@@ -95,8 +105,7 @@ class DeeperPipeline:
 
     def POS(self, sentence):
         """Return Perceptron Pre-trained POS tags for words in a sentence."""
-        pretrain = PerceptronTagger()
-        return pretrain.tag(sentence)
+        return self.tagger.tag(sentence)
 
     def dep_parse_and_headword(self, sentence):
         """Return the dependecy list and headword of the given sentence."""
@@ -211,5 +220,5 @@ class DeeperPipeline:
 
 # Driver Code
 # url = "http://localhost:8983/solr/searchparty"
-# deepernlp = DeeperPipeline(url, False)
-# deepernlp.index_sentences()
+# deepernlp = DeeperPipeline(url, True)
+# deepernlp.index_sentence("This is a Demo sentence ", "demo_2")

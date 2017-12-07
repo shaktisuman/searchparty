@@ -26,11 +26,15 @@ class ShallowPipeline:
 
     def index_sentences(self):
         """Index the sentences of the corpus."""
-        i = 0
-        for sentence in self.getSentences():
-            doc = {'id': i, 'tokens': sentence}
-            self.solr.add(doc)
-            i = i+1
+        for fileid in reuters.fileids():
+            i = 0
+            for sentence in self.getSentences(fileid):
+                self.index_sentence(sentence, fileid+"_"+str(i))
+                i = i+1
+
+    def index_sentence(self, sentence, id):
+        doc = {'id': id, 'tokens': sentence}
+        self.solr.add_shallow(doc)
 
     def getSentences(self):
         """Return 100 sentences if testrun, all sentences otherwise."""
@@ -46,7 +50,6 @@ class ShallowPipeline:
             print " ".join(doc["tokens"])
 
 # Driver Code
-url = "http://localhost:8983/solr/searchparty"
-shallownlp = ShallowPipeline(url, True)
-# shallownlp.index_sentences()
-shallownlp.search("Malaysia and Japan")
+# url = "http://localhost:8983/solr/searchparty"
+# shallownlp = ShallowPipeline(url, True)
+# shallownlp.index_sentence('This is a demo sentence', 'demo_1')

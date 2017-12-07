@@ -27,6 +27,12 @@ class SolrSearch:
         self.weightage = {}
         self.setWeigtage([10, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])
 
+    def add_shallow(self, doc):
+        """Index the shallow document in solr."""
+        self.conn.add(id=doc["id"], tokens=doc["tokens"])
+        self.conn.commit()
+
+
     def add(self, doc):
         """Index the document in solr."""
         self.conn.add(id=doc["id"], tokens=doc["tokens"], stems=doc["stems"],
@@ -41,7 +47,7 @@ class SolrSearch:
 
     def query(self, query):
         """Query input tokens."""
-        query_url = self.url+"/select?fl=sentence&q="+ query
+        query_url = self.url+"/select?fl=sentence,id&q="+ query
         query_url += "&" + self.queryFeatures()
         data = urllib.quote(query_url, safe="%/\()+,'\"&$:?=^!@$#*")
         connection = urlopen(data)
