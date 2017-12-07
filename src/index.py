@@ -13,7 +13,7 @@ class SolrSearch:
     """
     fields = ["tokens","stems","phrases", "headword", "pos", "lemma",
               "hypernyms", "hyponyms", "substance_meronym", "member_meronym",
-              "part_meronym", "substance_holonym", "member_holonym", "part_holonym",
+              "part_meronym", "substance_holonym", "member_holonym", "part_holonym", "synonyms"
               ]
 
     def __init__(self, url):
@@ -36,7 +36,7 @@ class SolrSearch:
                       member_meronym=doc["member_meronym"],
                       part_meronym=doc["part_meronym"], substance_holonym=doc["substance_holonym"],
                       member_holonym=doc["member_holonym"], part_holonym=doc["part_holonym"],
-                      sentence=doc["sentence"])
+                      sentence=doc["sentence"], synonyms=doc["synonyms"])
         self.conn.commit()
 
     def query(self, query):
@@ -47,7 +47,7 @@ class SolrSearch:
         connection = urlopen(data)
         response = eval(connection.read())
         print "query formed: ", query_url
-        print response['response']['numFound'], "documents found."
+        # print response['response']['numFound'], "documents found."
         return response['response']['docs']
 
     def setWeigtage(self, weightage):

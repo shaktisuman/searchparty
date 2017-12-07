@@ -54,13 +54,15 @@ class DeeperPipeline:
                 substance_holonym = self.substance_holonym(sentence)
                 member_holonym = self.member_holonym(sentence)
                 part_holonym = self.part_holonym(sentence)
+                synonyms = self.synonyms(sentence)
                 doc = {'id': i, 'tokens': sentence, 'stems': stems, 'lemma': lemma,
                        'phrases': dependency_parse, 'headword': headword,
                         'pos': POS, 'hypernyms': hypernym,
                        'hyponyms': hyponym, 'substance_meronym': substance_meronym,
                        'member_meronym': member_meronym, 'part_meronym': part_meronym,
                        'substance_holonym': substance_holonym, 'member_holonym': member_holonym,
-                       'part_holonym': part_holonym, 'sentence': ' '.join(sentence)}
+                       'part_holonym': part_holonym, 'sentence': ' '.join(sentence),
+                       'synonyms': synonyms}
                 self.solr.add(doc)
             except AssertionError:
                 print "An assertion error occured"
@@ -116,8 +118,6 @@ class DeeperPipeline:
         for words in sentence:
             if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].hypernyms()) is not 0:
                 hypernym_list.append((wordnet.synsets(words))[0].hypernyms()[0].name().split(".")[0])
-            else:
-                hypernym_list.append("")
         return hypernym_list
 
     def hyponym(self, sentence):
@@ -126,8 +126,6 @@ class DeeperPipeline:
         for words in sentence:
             if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].hyponyms()) is not 0:
                 hyponym_list.append((wordnet.synsets(words))[0].hyponyms()[0].name().split(".")[0])
-            else:
-                hyponym_list.append("")
         return hyponym_list
 
     def substance_meronym(self, sentence):
@@ -136,8 +134,6 @@ class DeeperPipeline:
         for words in sentence:
             if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].substance_meronyms()) is not 0:
                 substance_meronyms_list.append((wordnet.synsets(words))[0].substance_meronyms()[0].name().split(".")[0])
-            else:
-                substance_meronyms_list.append("")
         return substance_meronyms_list
 
     def member_meronym(self, sentence):
@@ -146,8 +142,6 @@ class DeeperPipeline:
         for words in sentence:
             if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].member_meronyms()) is not 0:
                 member_meronyms_list.append((wordnet.synsets(words))[0].member_meronyms()[0].name().split(".")[0])
-            else:
-                member_meronyms_list.append("")
         return member_meronyms_list
 
     def part_meronym(self, sentence):
@@ -156,8 +150,6 @@ class DeeperPipeline:
         for words in sentence:
             if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].part_meronyms()) is not 0:
                 part_meronyms_list.append((wordnet.synsets(words))[0].part_meronyms()[0].name().split(".")[0])
-            else:
-                part_meronyms_list.append("")
         return part_meronyms_list
 
     def substance_holonym(self, sentence):
@@ -166,8 +158,6 @@ class DeeperPipeline:
         for words in sentence:
             if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].substance_holonyms()) is not 0:
                 substance_holonym_list.append((wordnet.synsets(words))[0].substance_holonyms()[0].name().split(".")[0])
-            else:
-                substance_holonym_list.append("")
         return substance_holonym_list
 
     def member_holonym(self, sentence):
@@ -176,8 +166,6 @@ class DeeperPipeline:
         for words in sentence:
             if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].member_holonyms()) is not 0:
                 member_holonym_list.append((wordnet.synsets(words))[0].member_holonyms()[0].name().split(".")[0])
-            else:
-                member_holonym_list.append("")
         return member_holonym_list
 
     def part_holonym(self, sentence):
@@ -186,8 +174,6 @@ class DeeperPipeline:
         for words in sentence:
             if len(wordnet.synsets(words)) is not 0 and len((wordnet.synsets(words))[0].part_holonyms()) is not 0:
                 part_holonym_list.append((wordnet.synsets(words))[0].part_holonyms()[0].name().split(".")[0])
-            else:
-                part_holonym_list.append("")
         return part_holonym_list
 
     def penn_to_wn(self, tag):
@@ -201,6 +187,16 @@ class DeeperPipeline:
         elif tag in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
             return wordnet.VERB
         return
+
+    def synonyms(self, sentence):
+        """Return Wordnet based Synonyms of words in a sentence."""
+        synonym_list = []
+        for words in sentence:
+            synsets = wordnet.synsets(words)
+            if len(synsets) is not 0:
+                for ss in synsets:
+                    synonym_list += ss.lemma_names()
+        return set(synonym_list)
 
 
 # Driver Code

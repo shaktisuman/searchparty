@@ -437,7 +437,13 @@
   <field indexed="true" stored="true" name="part_holonym" type="text_general"/>
   <field indexed="true" stored="true" name="headword" type="text_general"/>
   <field indexed="true" stored="true" name="phrases" type="text_general"/>
-
+  <field indexed="true" stored="true" name="synonyms" type="text_general"/>
+  <copyField source="substance_meronym" dest="meronyms"/>
+  <copyField source="member_meronym" dest="meronyms"/>
+  <copyField source="part_meronym" dest="meronyms"/>
+  <copyField source="substance_holonym" dest="holonym"/>
+  <copyField source="member_holonym" dest="holonym"/>
+  <copyField source="part_holonym" dest="holonym"/>
   <!--
     End of fields added for Search Party
    -->
