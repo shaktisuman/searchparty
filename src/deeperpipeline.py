@@ -10,7 +10,7 @@ from nltk.corpus import wordnet
 
 
 os.environ['CLASSPATH'] = '../resources/stanford-ner-2017-06-09:../resources/stanford-parser-full-2017-06-09'
-os.environ['JAVAHOME'] = '/usr/bin/java'
+os.environ['JAVAHOME'] = '/usr/local/bin/java'
 os.environ['STANFORD_MODELS'] = '../resources/stanford-ner-2017-06-09/classifiers:../resources/stanford-parser-full-2017-06-09'
 
 
@@ -39,44 +39,46 @@ class DeeperPipeline:
 
     def index_sentences(self):
         """Index the sentences of the corpus."""
-        i = 0
-        for sentence in self.getSentences():
-            try:
-                stems = self.stem(sentence)
-                dependency_parse, headword = self.dep_parse_and_headword(sentence)
-                POS = self.POS(sentence)
-                lemma = self.lemma(POS)
-                hypernym = self.hypernym(sentence)
-                hyponym = self.hyponym(sentence)
-                substance_meronym = self.substance_meronym(sentence)
-                member_meronym = self.member_meronym(sentence)
-                part_meronym = self.part_meronym(sentence)
-                substance_holonym = self.substance_holonym(sentence)
-                member_holonym = self.member_holonym(sentence)
-                part_holonym = self.part_holonym(sentence)
-                synonyms = self.synonyms(sentence)
-                doc = {'id': i, 'tokens': sentence, 'stems': stems, 'lemma': lemma,
-                       'phrases': dependency_parse, 'headword': headword,
-                        'pos': POS, 'hypernyms': hypernym,
-                       'hyponyms': hyponym, 'substance_meronym': substance_meronym,
-                       'member_meronym': member_meronym, 'part_meronym': part_meronym,
-                       'substance_holonym': substance_holonym, 'member_holonym': member_holonym,
-                       'part_holonym': part_holonym, 'sentence': ' '.join(sentence),
-                       'synonyms': synonyms}
-                self.solr.add(doc)
-            except AssertionError:
-                print "An assertion error occured"
-            except:
-                print "An error occurred."
-            finally:
-                i = i+1
+        for fileid in reuters.fileids():
+            i = 0
+            for sentence in self.getSentences(fileid):
+                try
+                    sentence
+                    stems = self.stem(sentence)
+                    dependency_parse, headword = self.dep_parse_and_headword(sentence)
+                    POS = self.POS(sentence)
+                    lemma = self.lemma(POS)
+                    hypernym = self.hypernym(sentence)
+                    hyponym = self.hyponym(sentence)
+                    substance_meronym = self.substance_meronym(sentence)
+                    member_meronym = self.member_meronym(sentence)
+                    part_meronym = self.part_meronym(sentence)
+                    substance_holonym = self.substance_holonym(sentence)
+                    member_holonym = self.member_holonym(sentence)
+                    part_holonym = self.part_holonym(sentence)
+                    synonyms = self.synonyms(sentence)
+                    doc = {'id': fileid+"_"+i , 'tokens': sentence, 'stems': stems, 'lemma': lemma,
+                           'phrases': dependency_parse, 'headword': headword,
+                            'pos': POS, 'hypernyms': hypernym,
+                           'hyponyms': hyponym, 'substance_meronym': substance_meronym,
+                           'member_meronym': member_meronym, 'part_meronym': part_meronym,
+                           'substance_holonym': substance_holonym, 'member_holonym': member_holonym,
+                           'part_holonym': part_holonym, 'sentence': ' '.join(sentence),
+                           'synonyms': synonyms}
+                    self.solr.add(doc)
+                except AssertionError:
+                    print "An assertion error occured"
+                except:
+                    print "An error occurred."
+                finally:
+                    i = i+1
 
-    def getSentences(self):
+    def getSentences(self, fileid):
         """Return 100 sentences if testrun, all sentences otherwise."""
         if self.testrun:
             return reuters.sents()[0:5]
         else:
-            return reuters.sents()
+            return reuters.sents(fileid)
 
     def stem(self, sentence):
         """Return the list of stem for given sentence."""
@@ -198,8 +200,17 @@ class DeeperPipeline:
                     synonym_list += ss.lemma_names()
         return set(synonym_list)
 
+    def top_synonyms(self, sentence):
+        """Return Wordnet based Synonyms of words in a sentence."""
+        synonym_list = []
+        for words in sentence:
+            synsets = wordnet.synsets(words)
+            if len(synsets) is not 0:
+                for ss in synsets[0:3]:
+                    synonym_list += ss.lemma_names()
+        return set(synonym_list)
 
 # Driver Code
-# url = "http://129.110.92.21:8983/solr/searchparty"
-# deepernlp = DeeperPipeline(url, False)
-# deepernlp.index_sentences()
+url = "http://localhost:8983/solr/searchparty"
+deepernlp = DeeperPipeline(url, False)
+deepernlp.index_sentences()
